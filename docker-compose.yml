@@ -1,0 +1,45 @@
+ervices:
+  # ===========================================================
+  # SERVER SERVICE — Spring Boot REST API
+  # ===========================================================
+  server:
+    build:
+      context: ./server
+      # Look inside the "server" folder for the Dockerfile + source code.
+      dockerfile: Dockerfile
+    container_name: sb-server
+    # Friendly name instead of a random Docker-generated name.
+    ports:
+      - "8080:8080"
+      # host_port:container_port — browser uses localhost:8080
+      # to reach port 8080 INSIDE the container.
+    networks:
+      - app-network
+ 
+  # ===========================================================
+  # CLIENT SERVICE — React frontend (served by Nginx)
+  # ===========================================================
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: react-client
+    ports:
+      - "3000:80"
+      # Container's Nginx listens on 80; we expose it on host port 3000
+      # (matches the React dev server convention people expect).
+    depends_on:
+      - server
+      # Tells Compose to start "server" before "client".
+      # NOTE: this only controls START ORDER, not "wait until server
+      # is ready" — Spring Boot might still be booting when client starts.
+    networks:
+      - app-network
+ 
+networks:
+  app-network:
+    driver: bridge
+    # A private virtual network so client and server containers
+    # can talk to each other using their service names as hostnames
+    # (e.g., client could call http://server:8080 internally).
+ 
