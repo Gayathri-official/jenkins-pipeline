@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Spring Boot API with React UI
  
 This example app shows how to create a Spring Boot API and display its data with a React UI.
@@ -85,3 +86,6 @@ Please post any questions as comments on the [blog post](https://developer.okta.
 ## License
 
 Apache 2.0, see [LICENSE](LICENSE).
+=======
+# jenkins-pipeline
+>>>>>>> 70579feeae459c314a95321de94e87ad07788bc0

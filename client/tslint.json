@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
@@ -16,3 +17,23 @@
     "object-literal-sort-keys": false
   }
 }
+=======
+{
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "no-empty-interface": false,
+    "array-type": [true, "generic"],
+    "member-access": [true, "no-public"],
+    "ordered-imports": false,
+    "object-literal-sort-keys": false
+  }
+}
+>>>>>>> 70579feeae459c314a95321de94e87ad07788bc0
