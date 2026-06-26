@@ -3,7 +3,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/master']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/Gayathri-official/jenkins-pipeline.git'
+                    ]],
+                    extensions: [[$class: 'CleanBeforeCheckout']]
+                ])
             }
         }
         stage('Install Docker Compose') {
