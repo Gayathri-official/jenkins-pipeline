@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                sh 'DOCKER_BUILDKIT=0 docker-compose build'
             }
         }
         stage('Stop Old Containers') {
