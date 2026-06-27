@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
   "short_name": "Beer",
   "name": "Good Beer",
@@ -18,25 +17,4 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
-=======
-{
-  "short_name": "Beer",
-  "name": "Good Beer",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "beer.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "start_url": "./index.html",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
->>>>>>> 70579feeae459c314a95321de94e87ad07788bc0
 }
