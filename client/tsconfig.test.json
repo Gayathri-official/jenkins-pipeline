@@ -1,14 +1,5 @@
-<<<<<<< HEAD
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs"
   }
-=======
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "module": "commonjs"
-  }
->>>>>>> 70579feeae459c314a95321de94e87ad07788bc0
-}
