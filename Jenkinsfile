@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USERNAME = 'your-dockerhub-username'
+        DOCKERHUB_USERNAME = 'mudraboyinagayathri29'
         IMAGE_SERVER = "${DOCKERHUB_USERNAME}/spring-boot-server"
         IMAGE_CLIENT = "${DOCKERHUB_USERNAME}/react-client"
     }
