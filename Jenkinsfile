@@ -1,6 +1,12 @@
-
 pipeline {
     agent any
+
+    environment {
+        DOCKERHUB_USERNAME = 'your-dockerhub-username'
+        IMAGE_SERVER = "${DOCKERHUB_USERNAME}/spring-boot-server"
+        IMAGE_CLIENT = "${DOCKERHUB_USERNAME}/react-client"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -34,6 +40,25 @@ pipeline {
             }
         }
 
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-credentials',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker tag spring-boot-react-example_master-server:latest $IMAGE_SERVER:latest
+                        docker tag spring-boot-react-example_master-client:latest $IMAGE_CLIENT:latest
+                        docker push $IMAGE_SERVER:latest
+                        docker push $IMAGE_CLIENT:latest
+                        docker logout
+                    '''
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
@@ -49,7 +74,7 @@ pipeline {
 
     post {
         success {
-            echo 'SUCCESS! Server=localhost:8080, Client=localhost:80'
+            echo 'SUCCESS! Images pushed to Docker Hub. Server=localhost:8080, Client=localhost:80'
         }
         failure {
             echo 'FAILED! Check console output for errors.'
