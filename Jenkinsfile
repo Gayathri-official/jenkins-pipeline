@@ -1,12 +1,10 @@
 pipeline {
     agent any
-
     environment {
         DOCKERHUB_USERNAME = 'mudraboyinagayathri29'
         IMAGE_SERVER = "${DOCKERHUB_USERNAME}/spring-boot-server"
         IMAGE_CLIENT = "${DOCKERHUB_USERNAME}/react-client"
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -21,22 +19,16 @@ pipeline {
             }
         }
 
-        stage('Install Docker Compose') {
+        stage('Verify Docker') {
             steps {
-                sh '''
-                    if ! [ -x "$(command -v docker-compose)" ]; then
-                        curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
-                          -o /usr/local/bin/docker-compose
-                        chmod +x /usr/local/bin/docker-compose
-                    fi
-                    docker-compose --version
-                '''
+                bat 'docker --version'
+                bat 'docker compose version'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh 'DOCKER_BUILDKIT=0 docker-compose build'
+                bat 'set DOCKER_BUILDKIT=0 && docker compose build'
             }
         }
 
@@ -47,12 +39,12 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker tag spring-boot-react-example_master-server:latest $IMAGE_SERVER:latest
-                        docker tag spring-boot-react-example_master-client:latest $IMAGE_CLIENT:latest
-                        docker push $IMAGE_SERVER:latest
-                        docker push $IMAGE_CLIENT:latest
+                    bat '''
+                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                        docker tag spring-boot-react-example_master-server:latest %IMAGE_SERVER%:latest
+                        docker tag spring-boot-react-example_master-client:latest %IMAGE_CLIENT%:latest
+                        docker push %IMAGE_SERVER%:latest
+                        docker push %IMAGE_CLIENT%:latest
                         docker logout
                     '''
                 }
@@ -61,17 +53,16 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                    docker rm -f sb-server react-client || true
-                    docker-compose down || true
-                    docker-compose up -d
-                    sleep 10
+                bat '''
+                    docker rm -f sb-server react-client || exit 0
+                    docker compose down || exit 0
+                    docker compose up -d
+                    timeout /t 10
                     docker ps
                 '''
             }
         }
     }
-
     post {
         success {
             echo 'SUCCESS! Images pushed to Docker Hub. Server=localhost:8080, Client=localhost:80'
